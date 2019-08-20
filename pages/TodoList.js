@@ -1,30 +1,17 @@
 import React from 'react';
-import { AppLoading } from 'expo';
 import { Container, Text, Content, Item, Input, Button, List, ListItem } from 'native-base';
 import { SafeAreaView, View, StyleSheet, Dimensions, ScrollView, FlatList, Platform } from 'react-native'
-import * as Font from 'expo-font';
 import Constants from 'expo-constants';
-// import _ from "underscore";
-import { Ionicons } from '@expo/vector-icons';
+
 
 export default class TodoList extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            isReady: false,
             list : [],
             title: "",
         };
-    }
-
-    async componentDidMount() {
-        await Font.loadAsync({
-            Roboto: require('native-base/Fonts/Roboto.ttf'),
-            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font,
-        });
-        this.setState({ isReady: true });
     }
 
     addList = (text) => {
@@ -40,7 +27,7 @@ export default class TodoList extends React.Component {
                     <Text>{ item.content }</Text>
                 </View>
                 <View style={[styles.row, styles.listItemButtonViewStyle]}>
-                    <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]}>위로</Text>
+                    <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]} onPress={() => this.props.navigation.navigate('DetailPage', item)}>위로</Text>
                     <Text style={[styles.listItemButtonStyle, {color:"#00f"}]}>아래로</Text>
                     <Text style={[styles.listItemButtonStyle, {color:"#f00"}]}>삭제</Text>
                 </View>
@@ -51,10 +38,6 @@ export default class TodoList extends React.Component {
     _keyExtractor = (item, index) => item.id;
 
     render() {
-        if (!this.state.isReady) {
-            return <AppLoading />;
-        }
-
         return (
             <Container>
                 <Content>
@@ -81,7 +64,6 @@ export default class TodoList extends React.Component {
 
 const marginTop = Platform.OS === 'android' ? Constants.statusBarHeight : 0;
 const screenWidth = Math.round(Dimensions.get('window').width);
-const screenHeight = Math.round(Dimensions.get('window').height);
 
 const styles = StyleSheet.create({
     container: {

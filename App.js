@@ -1,14 +1,33 @@
 import React from 'react';
 import TodoList from './pages/TodoList';
+import DetailPage from './pages/DetailPage'
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import * as Font from 'expo-font';
+import {AppLoading} from "expo";
+import { Ionicons } from '@expo/vector-icons';
+
+TodoList.navigationOptions = {
+  title: 'TodoList',
+};
+
+DetailPage.navigationOptions = {
+  title: "DetailPage",
+}
 
 const AppNavigator = createStackNavigator({
-  Home: TodoList
+  TodoList,
+  DetailPage,
 });
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isReady: false,
+    };
+  }
 
   async componentDidMount() {
     await Font.loadAsync({
@@ -20,6 +39,9 @@ export default class App extends React.Component {
   }
 
   render() {
+    if (!this.state.isReady) {
+      return <AppLoading />;
+    }
     return <AppContainer />;
   }
 }
