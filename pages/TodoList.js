@@ -28,7 +28,7 @@ export default class TodoList extends React.Component {
                 </View>
                 <View style={[styles.row, styles.listItemButtonViewStyle]}>
                     <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]} onPress={() => this.props.navigation.navigate('DetailPage', item)}>위로</Text>
-                    <Text style={[styles.listItemButtonStyle, {color:"#00f"}]}>아래로</Text>
+                    <Text style={[styles.listItemButtonStyle, {color:"#00f"}]} onPress={() => this.props.navigation.navigate('CalendarPage', item)}>아래로</Text>
                     <Text style={[styles.listItemButtonStyle, {color:"#f00"}]}>삭제</Text>
                 </View>
             </View>

@@ -33,7 +33,7 @@ export default class DetailPage extends React.Component {
     }
 }
 
-const marginTop = Platform.OS === 'android' ? Constants.statusBarHeight : 0;
+const marginTop = Platform.OS === 'android' ? Constants.statusBarHeight : 10;
 const screenWidth = Math.round(Dimensions.get('window').width);
 
 
