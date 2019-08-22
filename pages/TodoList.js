@@ -3,8 +3,9 @@ import { Container, Text, Content, Item, Input, Button, List, ListItem } from 'n
 import { SafeAreaView, View, StyleSheet, Dimensions, ScrollView, FlatList, Platform } from 'react-native'
 import Constants from 'expo-constants';
 import TodoAddView from './TodoAddView'
+import TodoListView from './TodoListView'
+import { UserProvider } from "../context/TodoList";
 import _ from "underscore"
-
 
 export default class TodoList extends React.Component {
 
@@ -26,28 +27,11 @@ export default class TodoList extends React.Component {
 
     upOrderListItem = () => {
 
-    }
+    };
 
     removeListItem = (item) => {
         this.setState({list: _.reject(this.state.list, (listItem)=>{ listItem.id === item.id; })})
-    }
-
-    _renderItem = ({item}) => (
-        <ListItem>
-            <View style={[styles.row, styles.listViewStyle]}>
-                <View style={[styles.row,styles.listItemViewStyle]}>
-                    <Text>{ item.content }</Text>
-                </View>
-                <View style={[styles.row, styles.listItemButtonViewStyle]}>
-                    <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]} onPress={() => this.props.navigation.navigate('DetailPage', item)}>위로</Text>
-                    <Text style={[styles.listItemButtonStyle, {color:"#00f"}]} onPress={() => this.props.navigation.navigate('CalendarPage', item)}>아래로</Text>
-                    <Text style={[styles.listItemButtonStyle, {color:"#f00"}]} onPress={() => this.removeListItem(item)}>삭제</Text>
-                </View>
-            </View>
-        </ListItem>
-    );
-
-    _keyExtractor = (item, index) => item.id;
+    };
 
     render() {
         return (
@@ -59,10 +43,14 @@ export default class TodoList extends React.Component {
                                 <Text onPress={ () => { this.setState({showAddView: !this.state.showAddView}); this.setState({showAddText: this.state.showAddView? "Add View OPEN":"Add View CLOSE"}) }}>{ this.state.showAddText }</Text>
                             </View>
                         </View>
-                        { this.state.showAddView && <TodoAddView/> }
-                        <ScrollView>
-                            <FlatList data={ this.state.list } keyExtractor={ this._keyExtractor } renderItem={ this._renderItem } />
-                        </ScrollView>
+                        <UserProvider>
+                            <View style={[styles.container, styles.row]}>
+                                { this.state.showAddView && <TodoAddView/> }
+                            </View>
+                            <View style={[styles.container, styles.row]}>
+                                <TodoListView navi={this.props.navigation}/>
+                            </View>
+                        </UserProvider>
                     </SafeAreaView>
                 </Content>
             </Container>

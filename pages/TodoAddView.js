@@ -2,13 +2,13 @@ import React from 'react';
 import { Container, Text, Content, Item, Input, Button, DatePicker } from 'native-base';
 import { View, StyleSheet, Dimensions, Platform } from 'react-native'
 import Constants from 'expo-constants';
-import { UserConsumer } from "../context/TodoList";
+import {UserConsumer} from "../context/TodoList";
 
 export default class TodoAddView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { chosenDate: new Date() };
+        this.state = { chosenDate: new Date(), title: "" };
         this.setDate = this.setDate.bind(this);
     }
 
@@ -21,38 +21,35 @@ export default class TodoAddView extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
         return (
-            <Container>
-                <Content>
-                    <UserConsumer>
-                        {}
-                        <View style={[styles.container, styles.col, {padding: 0}]}>
-                            <View style={[styles.row, styles.container]}>
-                                <Item inlineLabel>
-                                    <Input placeholder='Todo Title' value={ this.state.title } onChangeText={ (text) => { this.setState( {title: text} ) } }/>
-                                </Item>
-                            </View>
-                            <View style={[styles.row, styles.container]}>
-                                <DatePicker
-                                    defaultDate={new Date()}
-                                    minimumDate={new Date()}
-                                    maximumDate={new Date(Number(new Date().getFullYear()) + 2, 12, 31)}
-                                    locale={"kr"}
-                                    timeZoneOffsetInMinutes={undefined}
-                                    modalTransparent={false}
-                                    animationType={"fade"}
-                                    androidMode={"default"}
-                                    placeHolderText="Due date"
-                                    textStyle={{ color: "green" }}
-                                    placeHolderTextStyle={{ color: "#d3d3d3" }}
-                                    onDateChange={this.setDate}
-                                    disabled={false}
-                                />
-                            </View>
-                            <Button style={{width: screenWidth-20, justifyContent: "center", paddingLeft:10, paddingRight:10}} danger ><Text> ADD ITEM </Text></Button>
-                        </View>
-                    </UserConsumer>
-                </Content>
-            </Container>
+            <View style={[styles.container, styles.col, {padding: 0}]}>
+                <View style={[styles.row, styles.container, {paddingTop: 0}]}>
+                    <Item inlineLabel>
+                        <Input placeholder='Todo Title' value={ this.state.title } onChangeText={ (text) => { this.setState( {title: text} ) } }/>
+                    </Item>
+                </View>
+                <View style={[styles.row, styles.container]}>
+                    <DatePicker
+                        defaultDate={new Date()}
+                        minimumDate={new Date()}
+                        maximumDate={new Date(Number(new Date().getFullYear()) + 2, 12, 31)}
+                        locale={"kr"}
+                        timeZoneOffsetInMinutes={undefined}
+                        modalTransparent={false}
+                        animationType={"fade"}
+                        androidMode={"default"}
+                        placeHolderText="Due date"
+                        textStyle={{ color: "green" }}
+                        placeHolderTextStyle={{ color: "#d3d3d3" }}
+                        onDateChange={this.setDate}
+                        disabled={false}
+                    />
+                </View>
+                <UserConsumer>
+                    { ({addListItem}) => (
+                        <Button style={{width: screenWidth-20, justifyContent: "center", paddingLeft:10, paddingRight:10}} danger onPress={ () => { addListItem({content: this.state.title, date: this.state.chosenDate.toString().substr(4, 12)}) } } ><Text> ADD ITEM </Text></Button>
+                    )}
+                </UserConsumer>
+            </View>
         );
     }
 }
