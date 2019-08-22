@@ -2,6 +2,7 @@ import React from 'react';
 import TodoList from './pages/TodoList';
 import DetailPage from './pages/DetailPage'
 import CalendarPage from './pages/CalendarPage'
+import { UserProvider } from "./context/TodoList";
 import { createStackNavigator, createAppContainer } from "react-navigation";
 import * as Font from 'expo-font';
 import {AppLoading} from "expo";

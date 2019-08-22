@@ -22,15 +22,15 @@ export default class DetailPage extends React.Component {
             <Container>
                 <Content>
                     <SafeAreaView style={[{marginTop}, styles.col, styles.topContainer]}>
-                        <View style={[styles.container, styles.row]}>
+                        <View style={[styles.container, styles.row, { backgroundColor: "#f00"}]}>
                             <View style={styles.view1}></View>
                             <View style={styles.view2}></View>
                             <View style={styles.view3}></View>
                         </View>
-                        <View style={[styles.container, styles.row]}>
+                        <View style={[styles.container, styles.row, { backgroundColor: "#0f0"}]}>
                             <View style={styles.view1}></View>
                         </View>
-                        <View style={[styles.container, styles.row]}>
+                        <View style={[styles.container, styles.row, { backgroundColor: "#00f"}]}>
                             <View style={styles.view1}></View>
                             <View style={styles.view2}></View>
                             <View style={styles.view3}></View>
@@ -49,8 +49,8 @@ const screenHeight = Math.round(Dimensions.get('window').height);
 
 const styles = StyleSheet.create({
     topContainer: {
-        alignContent: "space-between",
         height: screenHeight,
+        alignItems: "stretch"
     },
     container: {
         flex: 1,
