@@ -17,6 +17,7 @@ export default class DetailPage extends React.Component {
         const { navigation } = this.props;
         const itemId = navigation.getParam('id', 'NO-ID');
         const itemContent = navigation.getParam('content', 'some default value');
+        const itemDueDate = navigation.getParam('date', 'not select');
 
         return (
             <Container>
@@ -24,7 +25,7 @@ export default class DetailPage extends React.Component {
                     <SafeAreaView style={{marginTop}}>
                         <View style={[styles.container, styles.row]}>
                             <Text>{ itemContent }</Text>
-                            <Text>{ Font.isLoaded("Roboto").toString() }</Text>
+                            <Text>{ itemDueDate }</Text>
                         </View>
                     </SafeAreaView>
                 </Content>

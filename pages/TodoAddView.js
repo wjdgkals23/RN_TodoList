@@ -1,6 +1,8 @@
 import React from 'react';
 import { Container, Text, Content, Item, Input, Button, DatePicker } from 'native-base';
-import { View, StyleSheet, Dimensions, Platform } from 'react-native'
+import { View, StyleSheet, Dimensions, Platform, Modal } from 'react-native'
+import Calendar from 'react-native-calendar-datepicker';
+import Moment from 'moment';
 import Constants from 'expo-constants';
 import {UserConsumer} from "../context/TodoList";
 
@@ -8,12 +10,21 @@ export default class TodoAddView extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = { chosenDate: new Date(), title: "" };
+        this.state = { title: "", modalVisible: false, date: Moment().startOf('days'), backColor: '#fff' };
         this.setDate = this.setDate.bind(this);
     }
 
     setDate(newDate) {
         this.setState({ chosenDate: newDate });
+    }
+
+    addProcess(addFunc) {
+        if (this.state.title === "") {
+            alert("Empty Title")
+        } else {
+            addFunc({content: this.state.title, date: this.state.date.toString().substr(4, 12)});
+            this.setState({title: ""});
+        }
     }
 
     render() {
@@ -27,28 +38,34 @@ export default class TodoAddView extends React.Component {
                         <Input placeholder='Todo Title' value={ this.state.title } onChangeText={ (text) => { this.setState( {title: text} ) } }/>
                     </Item>
                 </View>
-                <View style={[styles.row, styles.container]}>
-                    <DatePicker
-                        defaultDate={new Date()}
-                        minimumDate={new Date()}
-                        maximumDate={new Date(Number(new Date().getFullYear()) + 2, 12, 31)}
-                        locale={"kr"}
-                        timeZoneOffsetInMinutes={undefined}
-                        modalTransparent={false}
-                        animationType={"fade"}
-                        androidMode={"default"}
-                        placeHolderText="Due date"
-                        textStyle={{ color: "green" }}
-                        placeHolderTextStyle={{ color: "#d3d3d3" }}
-                        onDateChange={this.setDate}
-                        disabled={false}
-                    />
+                <View style={[styles.inputButtonViewStyle, {paddingTop: 5, paddingLeft: 10, paddingRight: 10}]}>
+                    <Text onPress={ () => { this.setState({modalVisible: !this.state.modalVisible});}}>{ "CHOOSE DUE DATE" }</Text>
+                </View>
+                <View style={[styles.inputButtonViewStyle, {paddingTop: 5, paddingLeft: 10, paddingRight: 10}]}>
+                    <Text>{ this.state.date.toString().substr(4, 12) }</Text>
                 </View>
                 <UserConsumer>
                     { ({addListItem}) => (
-                        <Button style={{width: screenWidth-20, justifyContent: "center", paddingLeft:10, paddingRight:10}} danger onPress={ () => { addListItem({content: this.state.title, date: this.state.chosenDate.toString().substr(4, 12)}) } } ><Text> ADD ITEM </Text></Button>
+                        <Button style={styles.listItemButtonStyle} danger onPress={ () => { this.addProcess(addListItem) } } ><Text> ADD ITEM </Text></Button>
                     )}
                 </UserConsumer>
+                <Modal animationType="slide"
+                       transparent={true}
+                       visible={this.state.modalVisible}
+                       onRequestClose={() => {
+                           Alert.alert('Modal has been closed.');
+                       }}>
+                    <View style={[{marginLeft: 30, marginTop: 80, marginRight: 30, backgroundColor: '#fff', padding: 10}]}>
+                        <Calendar
+                            onChange={(date) => this.setState({date})}
+                            selected={this.state.date}
+                            // We use Moment.js to give the minimum and maximum dates.
+                            minDate={Moment().startOf('day')}
+                            maxDate={Moment().add(10, 'years').startOf('day')}
+                        />
+                        <Button style={{width: screenWidth-80, justifyContent: "center",}} warning onPress={ () => { this.setState({modalVisible: !this.state.modalVisible}); } } ><Text> DONE </Text></Button>
+                    </View>
+                </Modal>
             </View>
         );
     }
@@ -57,14 +74,13 @@ export default class TodoAddView extends React.Component {
 const marginTop = Platform.OS === 'android' ? Constants.statusBarHeight : 10;
 const screenWidth = Math.round(Dimensions.get('window').width);
 
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'flex-start',
         padding: 20,
+        backgroundColor: '#fff'
     },
     row: {
         flexDirection: 'row'
@@ -75,7 +91,10 @@ const styles = StyleSheet.create({
     inputButtonViewStyle: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        marginBottom: 20,
+        marginTop: 10,
+        marginRight: 5,
     },
     listViewStyle: {
         flex: 1,
@@ -88,7 +107,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     listItemButtonStyle:{
-        margin: 3,
+        width: screenWidth-20,
+        justifyContent: "center",
+        paddingLeft:10,
+        paddingRight:10
     },
     listItemViewStyle: {
         flex: 1,

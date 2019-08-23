@@ -19,20 +19,6 @@ export default class TodoList extends React.Component {
         };
     }
 
-    addListItem = (text) => {
-        console.log(text);
-        let newItem = { id: Date.now().toString(), content: text };
-        this.setState({list: [...this.state.list, newItem]});
-    };
-
-    upOrderListItem = () => {
-
-    };
-
-    removeListItem = (item) => {
-        this.setState({list: _.reject(this.state.list, (listItem)=>{ listItem.id === item.id; })})
-    };
-
     render() {
         return (
             <Container>

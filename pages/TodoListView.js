@@ -16,18 +16,18 @@ export default class TodoListView extends React.Component {
         <ListItem>
             <View style={[styles.row, styles.listViewStyle]}>
                 <View style={[styles.column,styles.listItemViewStyle]}>
-                    <Text>{ item.content }</Text>
+                    <Text style={{textDecorationLine: item.done? 'line-through':'none'}}>{ item.content }</Text>
                     <Text>{ "Due Date : " + item.date }</Text>
                 </View>
-                <View style={[styles.row, styles.listItemButtonViewStyle]}>
-                        <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]} onPress={() => this.state.navi.navigate('DetailPage', item)}>위로</Text>
-                        <Text style={[styles.listItemButtonStyle, {color:"#00f"}]} onPress={() => this.state.navi.navigate('CalendarPage', item)}>아래로</Text>
                     <UserConsumer>
-                        {({removeTodoListItem}) => (
-                            <Text style={[styles.listItemButtonStyle, {color:"#f00"}]} onPress={() => removeTodoListItem(item)}>삭제</Text>
+                        {({removeTodoListItem, changeTodoItemDone}) => (
+                            <View style={[styles.row, styles.listItemButtonViewStyle]}>
+                                <Text style={[styles.listItemButtonStyle, {color:"#0f0"}]} onPress={() => this.state.navi.navigate('DetailPage', item)}>자세히</Text>
+                                <Text style={[styles.listItemButtonStyle, {color:"#00f"}]} onPress={() => changeTodoItemDone(item)}>완료</Text>
+                                <Text style={[styles.listItemButtonStyle, {color:"#f00"}]} onPress={() => removeTodoListItem(item)}>삭제</Text>
+                            </View>
                         )}
                     </UserConsumer>
-                </View>
             </View>
         </ListItem>
     );
