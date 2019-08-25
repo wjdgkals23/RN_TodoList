@@ -1,5 +1,6 @@
 import React, { createContext } from 'react';
 import _ from "underscore";
+import produce from 'immer';
 
 const UserContext = createContext({
     todoList: [],
@@ -15,6 +16,13 @@ export class UserProvider extends React.Component {
         this.setState({todoList: [...this.state.todoList, newItem]});
     };
 
+    addListItem2 = (data) => {
+        let newItem = { id: Date.now().toString(), content: data.content, date: data.date, done: false };
+        this.setState(
+            produce(draft => {draft.todoList.push(newItem);})
+        );
+    }
+
     removeTodoListItem = (item) => {
         console.log("temp");
         console.log(item);
@@ -25,15 +33,13 @@ export class UserProvider extends React.Component {
         console.log("changestate");
         console.log(item);
         let ind = _.findIndex(this.state.todoList, (listItem) => { return listItem.id === item.id });
-        let newList = JSON.parse(JSON.stringify(this.state.todoList));
-        newList[ind].done = true;
-        this.setState({todoList: newList});
+        this.setState(produce(draft => { draft.todoList[ind].done = true; }));
     };
 
     state = {
         todoList: [],
         removeTodoListItem: this.removeTodoListItem,
-        addListItem: this.addListItem,
+        addListItem: this.addListItem2,
         changeTodoItemDone: this.changeTodoItemDone,
     };
 
