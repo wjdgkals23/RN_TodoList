@@ -29,6 +29,14 @@ export class UserProvider extends React.Component {
         this.setState({todoList: _.reject(this.state.todoList, (listItem) => { return listItem.id === item.id; })})
     };
 
+    removeTodoListItem2 = (item) => {
+        console.log("temp");
+        console.log(item);
+        this.setState(produce(draft => { draft.todoList.filter(todo => {
+            return !(todo.id === item.id)
+        }) }));
+    };
+
     changeTodoItemDone = (item) => {
         console.log("changestate");
         console.log(item);
@@ -38,7 +46,7 @@ export class UserProvider extends React.Component {
 
     state = {
         todoList: [],
-        removeTodoListItem: this.removeTodoListItem,
+        removeTodoListItem: this.removeTodoListItem2,
         addListItem: this.addListItem2,
         changeTodoItemDone: this.changeTodoItemDone,
     };
