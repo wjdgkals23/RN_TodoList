@@ -32,9 +32,7 @@ export class UserProvider extends React.Component {
     removeTodoListItem2 = (item) => {
         console.log("temp");
         console.log(item);
-        this.setState(produce(draft => { draft.todoList.filter(todo => {
-            return !(todo.id === item.id)
-        }) }));
+        this.setState(produce(draft => { draft.todoList.splice(todo => { todo.id === item.id },1)}));
     };
 
     changeTodoItemDone = (item) => {

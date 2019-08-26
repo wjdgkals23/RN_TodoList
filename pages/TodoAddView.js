@@ -18,13 +18,26 @@ export default class TodoAddView extends React.Component {
         this.setState({ chosenDate: newDate });
     }
 
-    addProcess(addFunc) {
-        if (this.state.title === "") {
-            alert("Empty Title")
-        } else {
-            addFunc({content: this.state.title, date: this.state.date.toString().substr(4, 12)});
-            this.setState({title: ""});
-        }
+    addProcess(addFunc, title) {
+        addFunc({content: title, date: this.state.date.toString().substr(4, 12)});
+        this.setState({title: ""});
+    }
+
+    checkEmpty() {
+        return new Promise((resolve, reject) => {
+            if(this.state.title === "") reject("Empty Title");
+            else resolve(this.state.title);
+        })
+    }; // 굳이 꾸역꾸역... 비동기도 아닌데... Test Code.... Firebase 해야겠다...
+
+    totalAddProc(addFunc) {
+        this.checkEmpty()
+            .then((result) => {
+                this.addProcess(addFunc, result)
+            })
+            .catch((err) => {
+                alert(err);
+            });
     }
 
     render() {
@@ -46,7 +59,7 @@ export default class TodoAddView extends React.Component {
                 </View>
                 <UserConsumer>
                     { ({addListItem}) => (
-                        <Button style={styles.listItemButtonStyle} danger onPress={ () => { this.addProcess(addListItem) } } ><Text> ADD ITEM </Text></Button>
+                        <Button style={styles.listItemButtonStyle} danger onPress={ () => { this.totalAddProc(addListItem) } } ><Text> ADD ITEM </Text></Button>
                     )}
                 </UserConsumer>
                 <Modal animationType="slide"
