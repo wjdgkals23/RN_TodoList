@@ -22,7 +22,7 @@
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.1",
     "styled-components": "^4.3.2",
-    "underscore": "^1.9.1"
+    "underscore": "^1.12.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^6.0.0"
